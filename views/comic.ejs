@@ -1,0 +1,823 @@
+<%- include("layout/header.ejs") %>
+
+    <div class="container">
+        <div class="rum">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/"><i class="fa-solid fa-house"></i> Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="/list">Truyện</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"><a href=" "><%= comic.name %></a></li>
+                </ol>
+            </nav>
+        </div>
+       
+        <div class="comic-detail-section container">
+            <div class="detail-section">
+                <div class="comic-content">
+                    <div class="card" style="background-color: white;">
+                        <div class="card-body text-white">
+                            <div class="d-flex align-items-stretch text-dark">
+                                <div>
+                                    <img src="<%= comic.image %>" alt="" width="320px" ; height="400px">
+                                </div>
+                                <div class="ml-2 w-100">
+                                    <div class="title-sub-card" style="font-size: 32px;">
+                                        <%= comic.name %>
+                                    </div>
+                                    <div>
+                                        Tên khác: LAG, Unlimited Passive, 언리미티드 패시브 <br>
+                                        Tác giả: <%= comic.author %> <br>
+                                        Trạng thái: Đang thực hiện <br>
+                                        Mới nhất: <%= comic.chapters.length %> <br>
+                                    </div>
+                                    <div class="evaluated">
+                                        <form id="ratingForm">
+                                          <div class="rating">
+                                            <input type="radio" hidden name="rate" id="rating-opt5" data-idx="4">
+                                            <label for="rating-opt5" class="rating-label"><span>Rất hài lòng</span></label>
+                                      
+                                            <input type="radio" hidden name="rate" id="rating-opt4" data-idx="3">
+                                            <label for="rating-opt4" class="rating-label"><span>Hơi hài lòng</span></label>
+                                      
+                                            <input type="radio" hidden name="rate" id="rating-opt3" data-idx="2">
+                                            <label for="rating-opt3" class="rating-label"><span>Trung tính</span></label>
+                                      
+                                            <input type="radio" hidden name="rate" id="rating-opt2" data-idx="1">
+                                            <label for="rating-opt2" class="rating-label"><span>Không hài lòng</span></label>
+                        
+                                            <input type="radio" hidden name="rate" id="rating-opt1" data-idx="0">
+                                            <label for="rating-opt1" class="rating-label"><span>Rất không hài lòng</span></label>
+                                    
+                                    
+                                          </div>
+                                        </form>
+                                      </div>
+                                      
+                                      <% function formatNumberWithCommas(number) {
+                                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                                      } %>
+                                    <div>
+                                        <%= comic.name %> -
+                                        Xếp Hạng: <%= result.average %>/5 - <%= formatNumberWithCommas(result.count)%> Lượt Đánh giá <br>
+                                        Thể Loại: <br>
+                                    </div>
+                                   
+                                    <div>
+                                        <% comic.category.forEach((cate) => { %>
+                                            <button type="button" class="m-1 btn btn-outline-primary" data-category="<%= cate %>"><%= cate %></button>
+                                          <% }); %>                                          
+                                    </div>
+
+                                    <ul class="list-inline">
+                                        <% if (!user) { %>
+                                          <div onclick="alert('Bạn cần đăng nhập để sử dụng chức năng này')" class="p-1 mt-2 list-inline-item bg-success text-white follow" style="width: 100px; height: 35px; border-radius: 5px;">
+                                            <i class="fa-sharp fa-regular fa-heart"></i>
+                                            Theo dõi
+                                          </div>
+                                        <% } else { %>
+                                            <% if(!isFollowing) { %>
+                                          <div onclick="toggleFollow('<%= comic._id %>')" class="p-1 mt-2 list-inline-item bg-success text-white rounded follow" style="width: auto; height: 35px;">
+                                            <i class="fa-sharp fa-regular fa-heart"></i>
+                                            Theo dõi  
+                                        </div>
+                                        <% } else { %>
+                                        <div onclick="toggleFollow('<%= comic._id %>')" class="p-1 mt-2 list-inline-item bg-danger text-white rounded follow" style="width: auto; height: 35px;">
+                                            <i class="fa-sharp fa-regular fa-heart"></i>
+                                             Bỏ Theo dõi  
+                                        </div>
+                                        <% } %>
+                                        <% } %>
+                                        <li class="list-inline-item follower"><%= formatNumberWithCommas( comic.followers.length )%> Người Theo Dõi</li>
+                                      </ul>
+                                      
+
+                                    <ul class="list-inline">
+                                        <% if (comic.chapters.length > 0) { %>
+                                            <% if ( history ) { %>
+                                            <div class="p-1 list-inline-item bg-info text-white rounded"
+                                
+                                            style="width: 200px; height: 35px;"> <a href="/comic/reading-history/<%= comic._id %>" style="color: white; padding-left: 25px; font-size: large;">Đọc tiếp chương <%= chapterNumber %></a></div>
+                                            <% }  %>
+                                            <div class="p-1 list-inline-item bg-danger text-white rounded"
+                                            style="width: 100px; height: 35px;"><a href="/comic/chapter/<%= comic.chapters[0]._id %>" style="color: white;">Bắt đầu đọc</a></div>
+                                       
+                                        <% } else { %>
+                                            <div class="p-1 list-inline-item bg-danger text-white rounded"
+                                            style="width: 100px; height: 35px; text-align: center;">Bắt đầu đọc</div>        
+                                            <% } %>
+                                        <li class="list-inline-item"><i class="fa-solid fa-bell"
+                                                style="color: #f8fd08;"></i></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <% if (comic.ageRating >= 16) { %>
+                            <div class="card" style="background-color: papayawhip ;">
+                                <div class="card-body 1">
+                                    <var class="text-danger">Cảnh báo độ tuổi:</var> <var class="text-dark"> Truyện bạn
+                                        sắp xem có những </var> <var class="text-danger"> nội dung nhạy cảm, kinh dị
+                                    </var><var class="text-dark">, chỉ phù hợp lứa </var> <var class="text-danger"> tuổi
+                                        16+ </var> <var class="text-dark"> bạn đọc cân nhắc trước khi xem. Tại trang
+                                        này, chúng tôi từ chối hoàn toàn mọi ảnh hưởng, quy chế, pháp luật đến bạn và
+                                        chúng tôi. Nếu làm ảnh hưởng đến cá nhân hay tổ chức nào, khi được yêu cầu,
+                                        chúng tôi sẽ xem xét và gỡ bỏ.</var>
+                                </div>
+                            </div>
+                            <% } %>
+                            <div class="card" style="background-color:plum; margin-top: 5px;">
+                                <div>
+                                    <h4 style="color:purple ; margin-left: 10px ;">Tóm Tắt Nội Dung</h4>
+                                </div>
+                            </div>
+
+                            <div class="card" style="background-color: transparent ;">
+                                <div class="m-1 text-dark"><%= comic.title %>
+                                </div>
+                            </div>
+
+                            <div class="card" style="background-color:plum; margin-top: 5px;">
+                                <div>
+                                    <h4 style="color:purple ; margin-left: 10px ;">Danh Sách Chương</h4>
+                                </div>
+                            </div>
+                            <div>
+                                <table class="table" id="chapterTable">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Chương</th>
+                                            <th scope="col">Tiêu Đề</th>
+                                            <th scope="col">Nhóm Dịch</th>
+                                            <th scope="col" class="text-center">Trang Thái</th>
+                                            <th scope="col">Lượt Xem</th>
+                                            <th scope="col">Cập Nhật</th>
+                                        </tr>
+                                    </thead>
+                                   
+                                    <tbody>
+                                    <% const reversedChapters = comic.chapters.reverse(); %>
+                                    <% reversedChapters.forEach((chapter) => { %>
+                                            <tr onclick="readComic( '<%= chapter._id %>' )">
+
+                                                <th scope="row">#<%= chapter.chapterNumber %></th>
+                                                <td>N/A</td>
+                                                <td> </td>
+                                                <td class="text-center"> <i class="fa-solid fa-lock-open"></i></td>
+                                                <td> <%= chapter.views %> </td>
+                                                <% if (chapter) { %>
+                                                    <% const timeElapsed = Date.now() - chapter.createdAt.getTime(); %>
+                                                    <% const minutes = Math.floor(timeElapsed / (1000 * 60)); %>
+                                                    <% const hours = Math.floor(minutes / 60); %>
+                                                    <% const days = Math.floor(hours / 24); %>
+                                                    <% if (days > 7) { %>
+                                                        <% const date = chapter.createdAt.getDate(); %>
+                                                        <% const month = chapter.createdAt.getMonth() + 1; %>
+                                                        <% const year = chapter.createdAt.getFullYear(); %>
+                                                        <td> <%= date %>/<%= month %>/<%= year %></td>  
+                                                    <% } else if (days > 0) { %>
+                                                        <td><%= days %> ngày</td>  
+                                                    <% } else if (hours > 0) { %>
+                                                        <td> <%= hours %> giờ</td>
+                                                    <% } else { %>
+                                                        <td> <%= minutes %> phút</td>                              
+                                                    <% } %>
+                                                  <% } %>
+                                            </tr>
+                                    <% }); %>
+                                    </tbody>
+                                </table>
+                
+                                <ul class="list-inline" id="showButton">
+                                    <button class="p-1 list-inline-item bg-danger text-white rounded"
+                                        style="width: 110px; " id="showAllButton" onclick="showAllChapters()">Hiển thị tất cả </button>
+                                    <button class="p-1 list-inline-item bg-primary text-white rounded" style="width: 50px;"onclick="goToChapter()">Đi tới</button>
+                                    <input type="text" placeholder="Chương" class="chuong" id="chapterInput">
+                                </ul>
+                            </div>
+                            <%- include("comment.ejs") %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <div onclick="topFunction()" class="scroll-top" id="back-to-top"><img src="/images/top.png"></div>
+    </div>
+<style>
+    body {
+        background-color: rgb(235, 231, 224);
+    }
+    .showmore {
+      background-color: antiquewhite;
+      color: #8c8383;
+      text-align: center;
+      height: 35px;
+      padding-top: 5px;
+      border-radius: 5px;
+    }
+    .rep {
+      padding-left: 20px;
+    }
+    .list-inline button{
+        border: none;
+    }
+    .chuong {
+        width: 50px;
+        font-size: small;
+        height: 30px;
+    }
+    .chuong:focus{
+        outline: none;
+        box-shadow: none;
+    }
+    .scroll-top {
+        position: fixed;
+        bottom: 30px;
+        right: 10px;
+        width: 30px;
+        height: 30px;
+        border-radius: 30px;
+        z-index: 10000;
+        text-align: center;
+        line-height: 30px;
+        opacity: 0.4;
+        cursor: pointer;
+    }
+    .rum {
+        width: 98%;
+        margin-left: 13px;
+       padding-left: 20px;
+       padding-top: 5px;
+       background-color: whitesmoke;
+       box-sizing: border-box;
+       border-radius: 5px;
+       height: 40px;
+       margin-bottom: 5px;
+    }
+    .rum a {
+        text-decoration: none;
+        color: #8c8383;
+    }
+    .rum a:hover{
+        color: #f50057;
+    }
+    
+    .scroll-top img {
+        margin: 0 auto;
+        fill: #fff;
+        width: 30px;
+        height: 30px;
+    }
+    .rating {
+        display: inline-block;
+        font-size: 0;
+        position: relative;
+        text-transform: capitalize;
+        color: gray;
+    }
+    
+    label {
+        float: right;
+        padding: 0;
+        font-size: 30px;
+        cursor: pointer;
+    }
+    
+    label::before {
+        content: "\2606";
+        padding-bottom: 8px;
+        display: inline-block;
+        transition: 0.2s;
+    }
+    
+    span {
+        opacity: 0;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+        height: 20px;
+        font-size: 1rem;
+        white-space: nowrap;
+        transition: 0.15s ease-out;
+        pointer-events: none;
+        letter-spacing: -2px;
+        transform: translateY(-50%);
+    }
+    tbody tr:hover{
+        background-color: bisque;
+    }
+    
+    label:hover span {
+        opacity: 1;
+        transform: none;
+        letter-spacing: 0;
+    }
+    a:hover{
+        text-decoration: none;
+        color: #f986c6;
+    }
+    input:checked~label::before {
+        content: "\2605";
+        color: orange;
+        filter: drop-shadow(0 0 4px);
+        transform: rotate(.2turn);
+        transition-delay: calc(0.1 * attr(data-idx integer));
+    }
+   .rated {
+        color: orange;
+      }
+          
+</style>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+<script>
+        function readComic(chapterId) {
+            // Thực hiện hành động khi người dùng nhấp vào nút Đọc truyện
+            // Điều hướng đến trang đọc truyện với số chương
+            window.location.href = "/comic/chapter/" + chapterId;
+          }
+          
+       
+        // Get the button
+        let mybutton = document.getElementById("back-to-top");
+            
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function() {scrollFunction()};
+            
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+            }
+            
+        // When the user clicks on the button, scroll to the top of the document
+        function topFunction() {
+              document.body.scrollTop = 0;
+              document.documentElement.scrollTop = 0;
+            }
+// showw
+                var showAllButton = document.getElementById("showAllButton");
+                var table = document.getElementById("chapterTable");
+                var rows = table.getElementsByTagName("tr");
+                var showButton = document.getElementById("showButton");
+
+                var defaultRowCount = 6; // Số lượng thẻ tr hiển thị ban đầu
+            
+                // Ẩn các thẻ tr vượt quá số lượng mặc định
+                for (var i = defaultRowCount; i < rows.length; i++) {
+                    rows[i].style.display = "none";
+                }
+                if (rows.length <= defaultRowCount) {
+                    // Xóa button "Hiển thị tất cả" khi không đủ số lượng
+                    showButton.parentNode.removeChild(showButton);
+                }
+            
+                function showAllChapters() {
+                    // Kiểm tra trạng thái hiển thị của nút
+                    if (showAllButton) {
+                        // Hiển thị tất cả các thẻ tr
+                        for (var i = 0; i < rows.length; i++) {
+                            rows[i].style.display = "table-row";
+                        }
+                        showAllButton.parentNode.removeChild(showAllButton);
+                    }
+                }
+                function goToChapter() {
+                    var chapterInput = document.getElementById("chapterInput").value;
+                    
+                    // Lọc chapterNumber để lấy ra id
+                    var chapterId;
+                    <% comic.chapters.forEach((chapter) => { %>
+                        if ("<%- chapter.chapterNumber %>" === chapterInput) {
+                            chapterId = "<%- chapter._id %>";
+                        }
+                    <% }); %>
+                    
+                    if (chapterId) {
+                        window.location.href = "/comic/chapter/" + chapterId;
+                        document.getElementById("chapterInput").value = ""; // Xóa giá trị trường nhập liệu
+                    } else {
+                        alert("Chương không tồn tại!");
+                        document.getElementById("chapterInput").value = "";
+                    }
+                }
+                const buttons = document.querySelectorAll('.btn-outline-primary');
+
+
+// Show comment
+var showAll = document.getElementById("showAll");
+var cmt = document.querySelectorAll('.text-body');
+
+var defaultCmtCount = 5;
+for (var i = defaultCmtCount; i < cmt.length; i++) {
+  cmt[i].style.display = "none";
+}
+
+if (cmt.length <= defaultCmtCount) {
+  if (showAll && showAll.parentNode) {
+    showAll.parentNode.removeChild(showAll);
+  }
+}
+
+function showAllCmt() {
+  if (showAll) {
+    for (var i = 0; i < cmt.length; i++) {
+      cmt[i].style.display = "block";
+    }
+    if (showAll.parentNode) {
+      showAll.parentNode.removeChild(showAll);
+    }
+  }
+}
+
+
+
+
+
+//search
+            buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                const category = button.dataset.category;
+                const url = `/list?category=${category}`;
+                window.location.href = url;
+            });
+});
+const searchForm = document.getElementById('searchForm');
+const searchInput = document.getElementById('searchInput');
+
+searchForm.addEventListener('submit', (event) => {
+  event.preventDefault(); // Ngăn chặn submit form mặc định
+  
+  const keyword = searchInput.value.trim(); // Lấy từ khóa từ input và loại bỏ khoảng trắng đầu và cuối
+  
+  if (keyword !== '') {
+    const url = `/list?keyword=${keyword}`;
+    window.location.href = url;
+  }
+});
+
+const searchInput1 = document.querySelector('.form-control'); // Lấy thẻ input nhập liệu
+const searchResults = document.querySelector('.comic-result'); // Lấy phần tử hiển thị kết quả
+
+searchInput1.addEventListener('input', async (event) => {
+  const keyword = event.target.value; // Lấy giá trị từ input
+  try {
+    const encodedKeyword = encodeURIComponent(keyword); // Mã hóa keyword
+    const response = await fetch(`/search?keyword=${encodedKeyword}`); // Gửi request tới server
+    const comics = await response.json(); // Chuyển đổi response thành dữ liệu JSON
+    // Xóa các kết quả hiện tại trong hộp hiển thị
+    searchResults.innerHTML = '';
+     // Kiểm tra từ khóa có rỗng hay không
+     if (keyword.trim() === '') {
+      return; // Nếu từ khóa rỗng, không hiển thị kết quả
+    }
+    // Tạo các phần tử HTML để hiển thị kết quả
+    comics.forEach((comic) => {
+      const resultItem = document.createElement('div');
+      resultItem.classList.add('mini-comic');
+      resultItem.innerHTML = `
+        <div class="mini-pic">
+          <a href="/comic/${comic._id}"><img src="${comic.image}" alt=""></a>
+        </div>
+        <div class="mini-content">
+          <a href="/comic/${comic._id}">${comic.name}</a>
+          <br>
+          <a href="/comic/chapter/${comic.chapters[comic.chapters.length - 1]._id}">Chương ${comic.chapters.length}</a>
+        </div>
+      `;
+      searchResults.appendChild(resultItem);
+    });
+  } catch (error) {
+    console.error(error);
+  }
+});
+//rating    
+const ratingLabel = document.querySelectorAll('label[for^="rating-opt"]');
+    ratingLabel.forEach((label) => {
+    label.addEventListener('click', function(event) {
+            if (!'<%= userTitle %>') {
+                event.preventDefault(); // Ngăn chặn việc gửi dữ liệu đánh giá nếu chưa đăng nhập
+                // Hiển thị thông báo trong một phần tử HTML
+                  // Hiển thị alert
+                alert('Bạn cần đăng nhập để thực hiện chức năng này.');
+
+
+        }    
+        });
+});
+
+const ratingLabels = document.querySelectorAll('.rating label');
+                ratingLabels.forEach(label => {
+                label.addEventListener('click', handleRatingClick);
+            });
+
+    function handleRatingClick(event) {
+    const selectedRating = event.target.getAttribute('for'); // Lấy giá trị của thuộc tính "for" của label
+    const ratingInput = document.getElementById(selectedRating); // Tìm input radio tương ứng với label được chọn
+    if (ratingInput && !'<%= exist %>' && '<%= userTitle %>') {
+    const ratingValue = parseInt(ratingInput.dataset.idx) + 1; // Lấy giá trị đánh giá từ attribute "data-idx"
+    const url = window.location.href; // Lấy URL hiện tại
+    const urlParams = new URLSearchParams(url); // Tạo đối tượng URLSearchParams từ URL
+    const pathParts = window.location.pathname.split('/');
+    const comicId = pathParts[2]; // Lấy phần tử thứ 2 trong mảng pathParts
+    // Gửi yêu cầu AJAX hoặc thực hiện các xử lý khác tại đây
+    saveRatingToServer(ratingValue, comicId);
+    const alertTimeout = setTimeout(() => {
+        alert("Cảm ơn bạn đã đánh giá.")
+      }, 0); // 1000 milliseconds = 1 second
+      // Sau 1 giây, hàm dưới đây sẽ được gọi để đóng alert
+      setTimeout(() => {
+        clearTimeout(alertTimeout); // Hủy bỏ hàm setTimeout gọi alert
+      }, 1000); // 1000 milliseconds = 1 second
+  } else if ('<%= exist %>') {
+    const alertTimeout = setTimeout(() => {
+        alert('Người dùng đã đánh giá truyện này');
+      }, 0); // 1000 milliseconds = 1 second
+      
+      // Sau 1 giây, hàm dưới đây sẽ được gọi để đóng alert
+      setTimeout(() => {
+        clearTimeout(alertTimeout); // Hủy bỏ hàm setTimeout gọi alert
+      }, 1000); // 1000 milliseconds = 1 second
+      
+      
+  }
+}
+function saveRatingToServer(rating,comicId) {
+    // Gửi yêu cầu AJAX để lưu đánh giá
+    fetch(`/comic/${comicId}/save-rating`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ rating}),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Đánh giá đã được lưu trữ:', data);
+        // Thực hiện các xử lý khác sau khi lưu đánh giá thành công
+      })
+      .catch(error => {
+        console.error('Lỗi khi lưu đánh giá:', error);
+      });
+  }
+//user
+if ('<%= userTitle %>'){
+  const targetElement = document.querySelector('.user-login');
+const hiddenElement = document.querySelector('.user-info');
+
+targetElement.addEventListener('mouseover', function() {
+  hiddenElement.style.display = 'block';
+});
+hiddenElement.addEventListener('mouseover', function() {
+    hiddenElement.style.display = 'block';
+  });
+
+targetElement.addEventListener('mouseleave', function() {
+  hiddenElement.style.display = 'none';
+});
+hiddenElement.addEventListener('mouseleave', function() {
+    hiddenElement.style.display = 'none';
+  });
+}
+
+// flowwer
+function toggleFollow(comicId) {
+    // Gửi yêu cầu AJAX để thêm/bỏ theo dõi truyện
+    fetch(`/comic/${comicId}/toggle-follow`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        // Cập nhật giao diện người dùng tương ứng
+        const followButton = document.querySelector('.follow');
+        const followerCount = document.querySelector('.follower');
+        if (data.isFollowing) {
+          followButton.classList.add('bg-danger');
+          followButton.innerHTML = '<i class="fa-sharp fa-regular fa-heart"></i> Bỏ Theo Dõi';
+          followerCount.innerHTML = `${data.followerCount} Người Theo Dõi`;
+        } else {
+          followButton.classList.add('bg-success');
+          followButton.classList.remove('bg-danger');
+          followButton.innerHTML = '<i class="fa-sharp fa-regular fa-heart"></i> Theo Dõi';
+          followerCount.innerHTML = `${data.followerCount} Người Theo Dõi`;
+        }
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  }
+//color
+const averageRating = '<%= result.average %>'; // Thay giá trị này bằng giá trị trung bình đánh giá thực tế
+
+const ratingLabelss = document.querySelectorAll('.rating-label');
+const reversedLabelss = Array.from(ratingLabels).reverse(); // Sắp xếp mảng các nhãn theo thứ tự ngược lại
+
+reversedLabelss.forEach((label, index) => {
+  if (index + 1 <= averageRating) {
+    label.classList.add('rated');
+  } else {
+    label.classList.remove('rated');
+  }
+});
+
+// repcomment
+function deleteCmt(commentId) {
+  fetch(`/comments/${commentId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      const comment = document.querySelector('.cmt-sus');
+
+      if (comment) {
+        // Hiển thị thông báo đã xóa bình luận
+        comment.innerHTML = 'Đã xóa bình luận.';
+      }
+    }
+  })
+  .catch(error => {
+    console.error(error);
+  });
+}
+
+if ( '<%= ecmt %>' ) {
+  const repCmt = document.querySelectorAll('.rep-cmt');
+  repCmt.forEach((element) => {
+    element.addEventListener('click', function(event) {
+      if (!'<%= userTitle %>') {
+        event.preventDefault();
+        alert('Bạn cần đăng nhập để thực hiện chức năng này.');
+      }
+    });
+  }); 
+}
+const submitCmt = document.querySelector('.btn-sm');
+submitCmt.addEventListener('click',function(event) {
+  const content = document.getElementById("exampleFormControlTextarea1").value.trim();
+  if (!'<%= userTitle %>') {
+    event.preventDefault(); // Ngăn chặn việc gửi dữ liệu đánh giá nếu chưa đăng nhập
+    // Hiển thị thông báo trong một phần tử HTML
+    document.getElementById("exampleFormControlTextarea1").value = "";
+      // Hiển thị alert
+    alert('Bạn cần đăng nhập để thực hiện chức năng này.');
+}
+});
+
+if ('<%= userTitle %>') {
+  const subint = document.querySelector('.text-box');
+  const subcmt = document.querySelector('.btn-sm');
+subcmt.addEventListener('click', handleCommentClick);
+function handleCommentClick(event) {
+  var content = document.getElementById("exampleFormControlTextarea1").value;
+  if (content.trim() === "") {
+    // Hiển thị thông báo hoặc thực hiện các hành động khác khi giá trị content trống
+    alert("Nội dung bình luận không được để trống");
+    return;
+  }
+  document.getElementById("exampleFormControlTextarea1").value = "";
+  const url = window.location.href; // Lấy URL hiện tại
+    const urlParams = new URLSearchParams(url); // Tạo đối tượng URLSearchParams từ URL
+    const pathParts = window.location.pathname.split('/');
+    const comicId = pathParts[2]; 
+    saveCommentToServer(content, comicId);
+    const alertTimeout = setTimeout(() => {
+      alert("Bình luận đã được lưu trữ.")
+    }, 0); // 1000 milliseconds = 1 second
+    // Sau 1 giây, hàm dưới đây sẽ được gọi để đóng alert
+    setTimeout(() => {
+      clearTimeout(alertTimeout); // Hủy bỏ hàm setTimeout gọi alert
+    }, 1000); // 1000 milliseconds = 1 second
+}
+ function saveCommentToServer(content,comicId) {
+  // Gửi yêu cầu AJAX để lưu đánh giá
+  fetch(`/comic/${comicId}/save-comment`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({content}),
+  })
+  .then(response => response.json())
+      .then(data => {
+        console.log('Bình luận đã được lưu trữ:', data);
+        // Thực hiện các xử lý khác sau khi lưu đánh giá thành công
+      })
+      .catch(error => {
+        console.error('Lỗi khi lưu bình luận:', error);
+      });
+
+ }
+}
+
+function repCmt(commentId) {
+  if ('<%= userTitle %>') {
+    let formRepCmt = `
+      <form class="formCmt">
+        <div class="form-group position-relative">
+          <div class="input-group">
+            <textarea id="answering" class="form-control" placeholder="..." rows="1" contenteditable="true"></textarea>
+            <div class="input-group-append">
+              <button type="button" class="btn btn-primary btn-sm btnRCmt">gửi</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    `;
+    let closestActionCmt = event.target.closest('.action-cmt');
+    closestActionCmt.insertAdjacentHTML('beforeend', formRepCmt);
+    
+    let answeringTextarea = closestActionCmt.querySelector('#answering');
+    answeringTextarea.focus();
+    
+    answeringTextarea.style.height = answeringTextarea.scrollHeight + 'px';
+    answeringTextarea.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = this.scrollHeight + 'px';
+    });
+    
+    answeringTextarea.removeAttribute('id');
+    
+    document.addEventListener('click', function(event) {
+      if (event.target.classList.contains('btnRCmt')) {
+        let formCmt = event.target.closest('.formCmt');
+        let textarea = formCmt.querySelector('textarea');
+        let content = textarea.value;
+        const parentId = commentId;
+        const url = window.location.href; // Lấy URL hiện tại
+        const urlParams = new URLSearchParams(url); // Tạo đối tượng URLSearchParams từ URL
+        const pathParts = window.location.pathname.split('/');
+        const comicId = pathParts[2]; // Lấy phần tử thứ 2 trong mảng pathParts
+  
+        if (content.trim() === '') {
+          alert('Nội dung repcomment không được để trống');
+          return;
+        }
+        console.log(parentId)
+        saveCommentToServer(content, comicId, parentId);
+        textarea.value = ''; // Xóa nội dung trong trường textarea
+  
+        const alertTimeout = setTimeout(() => {
+          alert("Bình luận đã được lưu trữ.");
+        }, 0); // 1000 milliseconds = 0 second
+  
+        // Sau 1 giây, hàm dưới đây sẽ được gọi để đóng alert
+        setTimeout(() => {
+          clearTimeout(alertTimeout); // Hủy bỏ hàm setTimeout gọi alert
+        }, 2000); // 2000 milliseconds = 2 seconds
+      }
+    });
+  
+    function saveCommentToServer(content, comicId, parentId) {
+      // Gửi yêu cầu AJAX để lưu repcomment
+      fetch(`/comic/${comicId}/save-comment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content, parentId }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Bình luận đã được lưu trữ:', data);
+          // Thực hiện các xử lý khác sau khi lưu repcomment thành công
+        })
+        .catch(error => {
+          console.error('Lỗi khi lưu repcomment:', error);
+        });
+    }
+  }
+}
+
+
+
+
+
+	
+
+
+</script>
+
+</body>
+
+
+<%- include("layout/footer.ejs") %>

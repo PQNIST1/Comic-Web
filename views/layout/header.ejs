@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/index.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+      integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="icon" href="https://goctruyentranhhay.net/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="https://goctruyentranhhay.net/favicon.ico">
+    <link rel="icon" href="/admin/favicon.ico">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <title>Goctruyenhay</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light cs">
+      <div class="container-md">
+        <div class="div row">
+          <a class="navbar-brand" href="/"
+            ><i
+              class="fa fa-book text-white"
+              style="font-size: 48px; margin-right: 20px"
+            >
+              <p
+                style="
+                  float: right;
+                  font-size: 20px;
+                  margin-top: 15px;
+                  margin-left: 10px;
+                  color: white;
+                "
+              >
+                GOCTRUYENHAY
+              </p></i
+            ></a
+          >
+        </div>
+
+        <div class="navbar">
+          <div class="nav">
+            <form class="form-inline my-2 my-lg-0 input" id="searchForm">
+              <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+              <input
+                class="form-control mr-sm-2"
+                type="search"
+                placeholder="Nhập từ khóa"
+                aria-label="Search" autocomplete="off"
+                id="searchInput"
+              style="color: aliceblue;"
+              />
+            </form>
+            <div class="comic-result"></div>
+            <li class="nav-item" id="linkElement">
+              <a class="nav-link text-blue" style="padding-left: 10px; padding-right: 10px; color: blue; font-size: medium;" href="/">Trang chủ</a>
+            </li>
+              <li class="nav-item" id="linkElementt" style="padding-right: 5px;">
+                <a class="nav-link" href="/list" style="color: blue;">Danh sách</a>
+              </li>
+          <li class="nav-item" style="padding-top: 5px; padding-left: 5px;">
+            <% if (!user) { %>
+              <a href="/login" style="text-decoration: none;">
+                <i class="fa-solid fa-circle-user" style="font-size: 30px"></i>
+                <span class="login"  style="color: #004085; opacity: 1; letter-spacing: 0px;" >Đăng nhập</span>
+              </a>  
+              <% } else { %>
+                <div class="user-login">
+                  <div class="user-image">
+                    <img src="/images/user (1).png" alt="">
+                  </div>
+                  <span class="login"  style="color: #004085; opacity: 1; letter-spacing: 0px; height: auto; transform: none; width: auto;" > <%= user.name %></span>
+              </div>
+              <div class="user-info">
+                <div class="info-item">
+                  <a href="#">
+                    <i class="fa-solid fa-user"></i>
+                    <%= user.name %>
+                  </a>
+                </div>
+                <div class="info-item">
+                  <a href="/change">
+                    <i class="fa-solid fa-pen"></i>
+                    Đổi Thông Tin
+                  </a>
+                </div>
+                <div class="info-item">
+                  <a href="/follow-comic">
+                    <i class="fa-solid fa-person-walking"></i>
+                    Truyện Theo Dõi
+                  </a>
+                </div>
+                <div class="info-item">
+                  <a href="/history">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    Truyện Đã Đọc
+                  </a>
+                </div>
+                <div class="info-item">
+                  <a href="/logout">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    Đăng Xuất
+                  </a>
+                </div>
+              </div>
+              <% } %>
+            </li>
+          </div>
+        </div>
+      </div>
+    </nav>
+    
+       

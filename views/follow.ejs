@@ -1,0 +1,293 @@
+<%- include("layout/header.ejs") %>
+<div class="breadcrumb container">
+    <li class="breadcrumb-item"><a href="/"><i class="fa-solid fa-house"></i> Trang Chủ</a></li>
+    <li class="breadcrumb-item"><a href="/list">Truyện</a></li>
+    <li class="breadcrumb-item"><a href="/follow-comic">Truyện Đã Theo Dõi</a></li>
+<div class="main-content">
+<div class="paging" style="padding-left: 10px; padding-top: 10px;">
+    <% if (currentPage > 1) { %> 
+        <button class="btn btn-light">
+          <a href="/follow-comic?page=<%= currentPage - 1 %>">Trước</a>
+      </button>
+    <% } else { %>
+      <button class="btn btn-light btn-disable">Trước</button>
+    <% } %>
+    <% if (currentPage < totalPages) { %>
+        <button class="btn btn-light ">
+          <a href="/follow-comic?page=<%= currentPage + 1 %>">Sau</a>
+      </button>
+    <% } else { %>
+      <button class="btn btn-light btn-disable ">Sau</button>
+    <% } %>    
+</div>
+<div class="comic-search container"> 
+    <% if(comics.length > 0) { %>
+        <% comics.forEach((comic) => { %>
+            <div class="item info" style="width: 165px; height: 295px; margin-top: 15px;">
+                <div class="card-1" style="width: 165px; height: 295px;">
+                <div class="comic">
+                <a href="/comic/<%= comic.comic._id %>">
+                 <img src="<%= comic.comic.image %>" class="card-img-top" alt="..." />
+                 </a>
+                </div>
+                 <div class="title" style="width: 165px; height: 35px;">
+                <a href="/comic/<%= comic.comic._id %>"><%= comic.comic.name %></a>
+                </div>
+                <div class="chapter">
+                    <p>Chương</p>
+                    <% const reversedChapters = comic.comic.chapters.slice(-2).reverse() %>
+                    <% reversedChapters.forEach((chapter) => { %>
+                    <a href="/comic/chapter/<%= chapter._id %>"><%= chapter.chapterNumber %></a>
+                    <% }); %>
+                    </div>
+            </div>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <div id="result">Không có truyện theo dõi. </div>
+  <% } %>
+</div>
+<div class="paging" style="padding-left: 10px; padding-bottom: 10px;">
+    <% if (currentPage > 1) { %> 
+        <button class="btn btn-light">
+          <a href="/follow-comic?page=<%= currentPage - 1 %>">Trước</a>
+      </button>
+    <% } else { %>
+      <button class="btn btn-light btn-disable">Trước</button>
+    <% } %>
+    <% if (currentPage < totalPages) { %>
+        <button class="btn btn-light ">
+          <a href="/follow-comic?page=<%= currentPage + 1 %>">Sau</a>
+      </button>
+    <% } else { %>
+      <button class="btn btn-light btn-disable ">Sau</button>
+    <% } %>   
+</div>
+</div>   
+
+<style>
+    #result {
+        text-align: center;
+        color: #585151;
+        font-size: larger;
+        margin-left: 40%;
+        font-weight: bold;
+       }
+* {
+padding: 0;
+margin: 0;
+}
+
+.breadcrumb {
+height: 40px;
+margin-top: 3px;
+line-height: 40px;
+margin-bottom: 3px;
+box-shadow: 0 2px 5px rgba(24, 23, 23, 0.2);
+background-color: white;
+}
+.breadcrumb li{
+padding-left: 15px;
+}
+.breadcrumb a{
+text-decoration: none;
+color: #8c8383;
+}
+.breadcrumb a:hover{
+color: #ff3e83a3;
+}
+.container {
+max-width: 1200px;
+min-width: 375px;
+margin-right: auto;
+margin-left: auto;
+}
+.main-content {
+width: 100%;
+margin: auto;
+position: relative;
+margin-top: 5px;
+box-shadow: 0 2px 5px rgba(0, 0, 0, .2);
+background-color: white;
+}
+.main-content .comic-search{
+flex-wrap: wrap;
+justify-content: flex-start;
+width: 90%;
+display: flex;
+}
+.comic {
+width: 165px;
+height: 225px;
+overflow: hidden;
+position: relative;
+box-sizing: border-box;
+border-radius: 5px;
+}
+.comic img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+transition: transform 0.3s ease;
+} 
+.comic img:hover {
+transform: scale(1.1); /* Scale hình */
+transform-origin: center center;
+}
+.card-body a:hover {
+color: #a06197;
+text-decoration: none;
+}
+.title a {
+text-decoration: none;
+color: #81818e;
+cursor: pointer;
+font-size: 13px;
+display: inline-block;
+overflow: hidden;
+text-overflow: ellipsis;
+font-weight: bold;
+line-height: normal;
+}
+.item{
+margin-right: 10px;
+}
+.chapter {
+width: 171px;
+height: 23.6px;
+}
+.chapter p {
+float: left;
+color: #fff7f7;
+font-size: 13px;
+background-color: #fb397ebf;
+border-radius: 5px;
+line-height: 23px;
+min-width: 60px;
+text-align: center;
+margin-right: 3px;
+font-weight: 600;
+}
+.chapter a {
+float: left;
+padding: 0 3px 0 3px;
+line-height: 22px;
+cursor: pointer;
+font-size: 11px;
+text-decoration: none;
+border: 1px solid #ff3e83a3;
+margin-right: 5px;
+min-width: 19px;
+text-align: center;
+color: #5f5c64;
+border-radius: 5px;
+font-weight: 600;
+}
+.chapter a:hover{
+background-color: #ff3e83a3;
+color: white;
+}
+.paging {
+display: flex;
+flex-wrap: wrap;
+margin-left: 15px;
+margin-top: 5px;
+}
+.paging button {
+width: 105px;
+margin-right: 14px;
+height: 30px;
+line-height: 18px;
+margin-bottom: 10px;
+}
+.btn-disable {
+background-color: #9aa0a0 !important;
+color: #4a484885 !important;
+cursor: not-allowed;
+}
+</style>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+crossorigin="anonymous">
+</script>
+<script>
+    // search
+    const searchForm = document.getElementById('searchForm');
+const searchInput = document.getElementById('searchInput');
+
+searchForm.addEventListener('submit', (event) => {
+  event.preventDefault(); // Ngăn chặn submit form mặc định
+  
+  const keyword = searchInput.value.trim(); // Lấy từ khóa từ input và loại bỏ khoảng trắng đầu và cuối
+  
+  if (keyword !== '') {
+    const url = `/list?keyword=${keyword}`;
+    window.location.href = url;
+  }
+});
+
+const searchInput1 = document.querySelector('.form-control'); // Lấy thẻ input nhập liệu
+const searchResults = document.querySelector('.comic-result'); // Lấy phần tử hiển thị kết quả
+
+searchInput1.addEventListener('input', async (event) => {
+  const keyword = event.target.value; // Lấy giá trị từ input
+  try {
+    const encodedKeyword = encodeURIComponent(keyword); // Mã hóa keyword
+    const response = await fetch(`/search?keyword=${encodedKeyword}`); // Gửi request tới server
+    const comics = await response.json(); // Chuyển đổi response thành dữ liệu JSON
+    // Xóa các kết quả hiện tại trong hộp hiển thị
+    searchResults.innerHTML = '';
+     // Kiểm tra từ khóa có rỗng hay không
+     if (keyword.trim() === '') {
+      return; // Nếu từ khóa rỗng, không hiển thị kết quả
+    }
+    // Tạo các phần tử HTML để hiển thị kết quả
+    comics.forEach((comic) => {
+      const resultItem = document.createElement('div');
+      resultItem.classList.add('mini-comic');
+      resultItem.innerHTML = `
+        <div class="mini-pic">
+          <a href="/comic/${comic._id}"><img src="${comic.image}" alt=""></a>
+        </div>
+        <div class="mini-content">
+          <a href="/comic/${comic._id}">${comic.name}</a>
+          <br>
+          <a href="/comic/chapter/${comic.chapters[comic.chapters.length - 1]._id}">Chương ${comic.chapters.length}</a>
+        </div>
+      `;
+      searchResults.appendChild(resultItem);
+    });
+  } catch (error) {
+    console.error(error);
+  }
+});
+// user
+const targetElement = document.querySelector('.user-login');
+const hiddenElement = document.querySelector('.user-info');
+
+targetElement.addEventListener('mouseover', function() {
+  hiddenElement.style.display = 'block';
+});
+hiddenElement.addEventListener('mouseover', function() {
+    hiddenElement.style.display = 'block';
+  });
+
+targetElement.addEventListener('mouseleave', function() {
+  hiddenElement.style.display = 'none';
+});
+hiddenElement.addEventListener('mouseleave', function() {
+    hiddenElement.style.display = 'none';
+  });
+</script>
+</body>
+
+</html>

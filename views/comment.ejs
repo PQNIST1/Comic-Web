@@ -1,0 +1,243 @@
+<div class="cmt-section container text-dark">
+    <p class="title">BÌNH LUẬN</p>
+    <form>
+        <div class="form-group position-relative">
+            <div class="input-group">
+                <textarea class="form-control text-box" id="exampleFormControlTextarea1" rows="3"
+                    placeholder="Người tiện tay vẽ hoa vẽ lá, Tôi đa tình tưởng đó là mùa xuân..."></textarea>
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-primary btn-sm">gửi</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="cmt-lately">
+    <% if (comments) { %>
+            <% comments.forEach((cmt) => { %>
+                <div class="cmt-sus" style="color: black;"></div>
+            <div class="col-md-12 text-body">
+                <% if( user && cmt.user.id == user.id && ! cmt.parentComment ) { %>
+                <div class="card mb-0 border-0 rep-tmc">
+                    <div class="card-header bg-transparent border-0 py-1">
+                        <b> Bạn </b> 
+                        <% if (cmt.chapter) { %>
+                        <a class="text-primary">Chương <%= cmt.chapter.chapterNumber %></a>
+                        <% } %>
+                        <% if (cmt) { %>
+                            <% const timeElapsed = Date.now() - cmt.createdAt.getTime(); %>
+                            <% const minutes = Math.floor(timeElapsed / (1000 * 60)); %>
+                            <% const hours = Math.floor(minutes / 60); %>
+                            <% const days = Math.floor(hours / 24); %>
+                            <% if (days > 7) { %>
+                                <% const date = cmt.createdAt.getDate(); %>
+                                <% const month = cmt.createdAt.getMonth() + 1; %>
+                                <% const year = cmt.createdAt.getFullYear(); %>
+                                <div class="d-inline text-black-50 small"><%= date %>/<%= month %>/<%= year %></div>
+                            <% } else if (days > 0) { %>
+                                <div class="d-inline text-black-50 small"><%= days %> ngày</div>
+                            <% } else if (hours > 0) { %>
+                                <div class="d-inline text-black-50 small"><%= hours %> giờ</div>
+                            <% } else { %>
+                                <div class="d-inline text-black-50 small"><%= minutes %> phút</div>
+                            <% } %>
+                        <% } %>
+                    </div>
+                    <div class="card-body border-0 py-1">
+                        <div class="col-md-12 bg-light rounded py-1">
+                            <%= cmt.content %>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 py-1 action-cmt">
+                        <button type="button" class="btn btn-primary btn-sm bg-transparent border-0 text-warning rep-cmt" onclick="repCmt('<%= cmt._id %>')">Trả
+                            lời</button>
+                        <button onclick="deleteCmt('<%= cmt._id %>')" type="button" class="btn btn-primary btn-sm bg-transparent border-0 text-warning delete-cmt">Xóa</button>
+                    </div>
+                </div>
+                <% cmt. childComment.forEach((cmtc)=> { %>
+                    <% if( user && cmtc.user.id == user.id ) { %>
+                    <div class="card mb-0 border-0 pl-10 rep">
+                        <div class="card-header bg-transparent border-0 py-1">
+                            <b>Bạn</b> 
+                            <% if (cmtc) { %>
+                                <% const timeElapsed = Date.now() - cmtc.createdAt.getTime(); %>
+                                <% const minutes = Math.floor(timeElapsed / (1000 * 60)); %>
+                                <% const hours = Math.floor(minutes / 60); %>
+                                <% const days = Math.floor(hours / 24); %>
+                                <% if (days > 7) { %>
+                                    <% const date = cmtc.createdAt.getDate(); %>
+                                    <% const month = cmtc.createdAt.getMonth() + 1; %>
+                                    <% const year = cmtc.createdAt.getFullYear(); %>
+                                    <div class="d-inline text-black-50 small"><%= date %>/<%= month %>/<%= year %></div>
+                                <% } else if (days > 0) { %>
+                                    <div class="d-inline text-black-50 small"><%= days %> ngày</div>
+                                <% } else if (hours > 0) { %>
+                                    <div class="d-inline text-black-50 small"><%= hours %> giờ</div>
+                                <% } else { %>
+                                    <div class="d-inline text-black-50 small"><%= minutes %> phút</div>
+                                <% } %>
+                            <% } %>
+                        </div>
+                        <div class="card-body border-0 py-1">
+                            <div class="col-md-12 bg-light rounded py-1">
+                                <%= cmtc.content %>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-0 py-1">
+                            <button onclick="deleteCmt('<%= cmtc._id %>')" type="button" class="btn btn-primary btn-sm bg-transparent border-0 text-warning delete-cmt">Xóa</button>
+                        </div>
+                    </div>
+                    <% } else { %>
+                        <div class="card mb-0 border-0 pl-10  rep">
+                            <div class="card-header bg-transparent border-0 py-1">
+                                <b><%= cmtc.user.name %></b> 
+                                <% if (cmtc) { %>
+                                    <% const timeElapsed = Date.now() - cmtc.createdAt.getTime(); %>
+                                    <% const minutes = Math.floor(timeElapsed / (1000 * 60)); %>
+                                    <% const hours = Math.floor(minutes / 60); %>
+                                    <% const days = Math.floor(hours / 24); %>
+                                    <% if (days > 7) { %>
+                                        <% const date = cmtc.createdAt.getDate(); %>
+                                        <% const month = cmtc.createdAt.getMonth() + 1; %>
+                                        <% const year = cmtc.createdAt.getFullYear(); %>
+                                        <div class="d-inline text-black-50 small"><%= date %>/<%= month %>/<%= year %></div>
+                                    <% } else if (days > 0) { %>
+                                        <div class="d-inline text-black-50 small"><%= days %> ngày</div>
+                                    <% } else if (hours > 0) { %>
+                                        <div class="d-inline text-black-50 small"><%= hours %> giờ</div>
+                                    <% } else { %>
+                                        <div class="d-inline text-black-50 small"><%= minutes %> phút</div>
+                                    <% } %>
+                                <% } %>
+                            </div>
+                            <div class="card-body border-0 py-1">
+                                <div class="col-md-12 bg-light rounded py-1">
+                                    <%= cmtc.content %>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent border-0 py-1">
+                                <button type="button" class="btn btn-primary btn-sm bg-transparent border-0 text-warning" fdprocessedid="b1auev">Báo
+                                    cáo</button>
+                                <button type="button" class="btn btn-primary btn-sm bg-transparent border-0 text-warning" fdprocessedid="qysc6r">Tag
+                                    Tên</button>
+                            </div>
+                        </div>
+                    <% } %>
+                <% }) %>
+            <% } else if( ! cmt.parentComment) { %>
+                <div class="card mb-0 border-0 rep-tmc">
+                    <div class="card-header bg-transparent border-0 py-1">
+                        <b><%= cmt.user.name %></b> 
+                        <% if (cmt.chapter) { %>
+                        <a class="text-primary">Chương <%= cmt.chapter.chapterNumber %></a>
+                        <% } %>
+                        <% if (cmt) { %>
+                            <% const timeElapsed = Date.now() - cmt.createdAt.getTime(); %>
+                            <% const minutes = Math.floor(timeElapsed / (1000 * 60)); %>
+                            <% const hours = Math.floor(minutes / 60); %>
+                            <% const days = Math.floor(hours / 24); %>
+                            <% if (days > 7) { %>
+                                <% const date = cmt.createdAt.getDate(); %>
+                                <% const month = cmt.createdAt.getMonth() + 1; %>
+                                <% const year = cmt.createdAt.getFullYear(); %>
+                                <div class="d-inline text-black-50 small"><%= date %>/<%= month %>/<%= year %></div>
+                            <% } else if (days > 0) { %>
+                                <div class="d-inline text-black-50 small"><%= days %> ngày</div>
+                            <% } else if (hours > 0) { %>
+                                <div class="d-inline text-black-50 small"><%= hours %> giờ</div>
+                            <% } else { %>
+                                <div class="d-inline text-black-50 small"><%= minutes %> phút</div>
+                            <% } %>
+                        <% } %>
+                    </div>
+                    <div class="card-body border-0 py-1">
+                        <div class="col-md-12 bg-light rounded py-1">
+                            <%= cmt.content %>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 py-1 action-cmt">
+                        <button type="button" class="btn btn-primary btn-sm bg-transparent border-0 text-warning rep-cmt" onclick="repCmt('<%= cmt._id %>')">Trả
+                            lời</button>
+                        <button type="button" class="btn btn-primary btn-sm bg-transparent border-0 text-warning">Báo
+                            cáo</button>
+                        <button type="button" class="btn btn-primary btn-sm bg-transparent border-0 text-warning">Tag
+                            Tên</button>
+                    </div>
+                </div>
+                <% cmt. childComment.forEach((cmtc)=> { %>
+                    <% if( user && cmtc.user.id == user.id ) { %>
+                    <div class="card mb-0 border-0 pl-10  rep">
+                        <div class="card-header bg-transparent border-0 py-1">
+                            <b>Bạn</b> 
+                            <% if (cmtc) { %>
+                                <% const timeElapsed = Date.now() - cmtc.createdAt.getTime(); %>
+                                <% const minutes = Math.floor(timeElapsed / (1000 * 60)); %>
+                                <% const hours = Math.floor(minutes / 60); %>
+                                <% const days = Math.floor(hours / 24); %>
+                                <% if (days > 7) { %>
+                                    <% const date = cmtc.createdAt.getDate(); %>
+                                    <% const month = cmtc.createdAt.getMonth() + 1; %>
+                                    <% const year = cmtc.createdAt.getFullYear(); %>
+                                    <div class="d-inline text-black-50 small"><%= date %>/<%= month %>/<%= year %></div>
+                                <% } else if (days > 0) { %>
+                                    <div class="d-inline text-black-50 small"><%= days %> ngày</div>
+                                <% } else if (hours > 0) { %>
+                                    <div class="d-inline text-black-50 small"><%= hours %> giờ</div>
+                                <% } else { %>
+                                    <div class="d-inline text-black-50 small"><%= minutes %> phút</div>
+                                <% } %>
+                            <% } %>
+                        </div>
+                        <div class="card-body border-0 py-1">
+                            <div class="col-md-12 bg-light rounded py-1">
+                                <%= cmtc.content %>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-0 py-1">
+                            <button onclick="deleteCmt('<%= cmtc._id %>')" type="button" class="btn btn-primary btn-sm bg-transparent border-0 text-warning delete-cmt">Xóa</button>
+                        </div>
+                    </div>
+                    <% } else { %>
+                        <div class="card mb-0 border-0 pl-10  rep">
+                            <div class="card-header bg-transparent border-0 py-1">
+                                <b><%= cmtc.user.name %></b> 
+                                <% if (cmtc) { %>
+                                    <% const timeElapsed = Date.now() - cmtc.createdAt.getTime(); %>
+                                    <% const minutes = Math.floor(timeElapsed / (1000 * 60)); %>
+                                    <% const hours = Math.floor(minutes / 60); %>
+                                    <% const days = Math.floor(hours / 24); %>
+                                    <% if (days > 7) { %>
+                                        <% const date = cmtc.createdAt.getDate(); %>
+                                        <% const month = cmtc.createdAt.getMonth() + 1; %>
+                                        <% const year = cmtc.createdAt.getFullYear(); %>
+                                        <div class="d-inline text-black-50 small"><%= date %>/<%= month %>/<%= year %></div>
+                                    <% } else if (days > 0) { %>
+                                        <div class="d-inline text-black-50 small"><%= days %> ngày</div>
+                                    <% } else if (hours > 0) { %>
+                                        <div class="d-inline text-black-50 small"><%= hours %> giờ</div>
+                                    <% } else { %>
+                                        <div class="d-inline text-black-50 small"><%= minutes %> phút</div>
+                                    <% } %>
+                                <% } %>
+                            </div>
+                            <div class="card-body border-0 py-1">
+                                <div class="col-md-12 bg-light rounded py-1">
+                                    <%= cmtc.content %>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent border-0 py-1">
+                                <button type="button" class="btn btn-primary btn-sm bg-transparent border-0 text-warning" fdprocessedid="b1auev">Báo
+                                    cáo</button>
+                                <button type="button" class="btn btn-primary btn-sm bg-transparent border-0 text-warning" fdprocessedid="qysc6r">Tag
+                                    Tên</button>
+                            </div>
+                        </div>
+                    <% } %>
+                <% }) %>
+            <% } %> 
+            </div> 
+            <% }) %>
+       
+    <% } %>  
+    <div class="showmore" id="showAll" onclick="showAllCmt()">Xem Thêm</div>
+</div>

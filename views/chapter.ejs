@@ -1,0 +1,598 @@
+<%- include("layout/header.ejs") %>   
+<div class="comtainer-fluid fluid">
+    <div class="main">
+        <div class="rum">
+            <nav aria-label="breadcrumb" style="padding-top: 10px;background-color: #fff;padding-bottom: 5px;">
+                <ol class="breadcrumb" style="padding-left: 5px;">
+                    <li class="breadcrumb-item"><a href="/"><i class="fa-solid fa-house"></i> Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="/list">Truyện</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"><a href="/comic/<%= chapter.comic._id %>"><%= chapter.comic.name %></a></li>
+                    <li class="breadcrumb-item active" aria-current="page"><a href="" style="color: #f50057;">Chương <%= chapter.chapterNumber %></a></li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+        <div onclick="topFunction()" class="scroll-top" id="back-to-top"><img src="/images/top.png"></div>
+                <div id="myElement" class="panel">
+                    <a class="server">
+                        <span class="server-icon"><i class="fa-solid fa-server"></i></span>
+                    </a>
+                    <div class="chapter-chap">
+                        <a class="list-comic-icon" title="Trang truyện" href="/comic/<%= chapter.comic._id %>"><i class="fa-sharp fa-solid fa-list list"></i></a>
+                        <select name="currentChapter" class="select-chapter" onchange="handleSelect(this)">
+                            <% comic.chapters.forEach((chapter) => { %>
+                              <% if (chapter._id.toString() === selectedChapterId) { %>
+                                <option value="<%= chapter._id %>" selected><%= chapter.chapterNumber %></option>
+                              <% } else { %>
+                                <option value="<%= chapter._id %>"><%= chapter.chapterNumber %></option>
+                              <% } %>
+                            <% }); %>
+                          </select>
+                          <% if (previousChapterId) { %>
+                          <a href="/comic/chapter/<%= previousChapterId %>" id="left-arrow" class="btn-select"><i class="fa-solid fa-chevron-left left  <%= nextChapterId ? '' : 'arrow-disabled' %>"></i></i></a>
+                          <% } %>
+                          <% if (nextChapterId) { %>
+                        <a href="/comic/chapter/<%= nextChapterId %>" id="right-arrow" class="btn-select"><i class="fa-solid fa-chevron-right right <%= previousChapterId ? '' : 'arrow-disabled' %>"></i></a>
+                        <% } %>
+
+                    </div>
+                    <a class="home-panel" title="Trang chủ" href="/">
+                        <i class="fa-solid fa-house"></i>
+                    </a>
+                    <a class="panel-report" title="Báo cáo chương" href="">
+                        <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+                    </a>
+                </div>
+            <div class="viewer">
+                <% chapter.pages.forEach((page) => { %>
+                <img src="<%= page %>" alt="">
+                <% }); %>
+            </div> 
+            <div class="button-change">
+                <% if (previousChapterId) { %>
+                    <div class="button-previous  <%= nextChapterId ? '' : 'button-disabled' %>" >
+                      <a href="/comic/chapter/<%= previousChapterId %>" class="">Chương trước</a>
+                  </div>
+                  <% } %>
+                  <% if (nextChapterId) { %>
+                  <div class="button-next <%= previousChapterId ? '' : 'button-disabled' %>">
+                      <a href="/comic/chapter/<%= nextChapterId %>" class="">Chương sau</a>
+                  </div>
+                  <% } %> 
+            </div>
+           
+   </div>
+
+   <%- include("comment.ejs") %>
+
+   <style>
+    body {
+        background-color: antiquewhite;
+    }
+
+    .showmore {
+        background-color: whitesmoke;
+        width: 1300px;
+        margin-left: 110px;
+        color: #8c8383;
+        text-align: center;
+        height: 35px;
+        padding-top: 5px;
+        border-radius: 5px;
+      }
+    .cmt-lately {
+        margin-bottom: 10px;
+    }
+    .cmt-sus {
+        padding-left: 110px;
+        padding-bottom: 10px;
+    }
+    .rep-tmc {
+        margin-left: 90px;
+        margin-right: 90px;
+    }
+    .rep {
+        background-color: antiquewhite;
+        padding-left: 110px;
+        padding-right: 80px;
+    }
+   .fluid {
+    width: 100%;
+    background-color: #333;
+    position: relative;
+   }
+    .main {
+        width: 75%;
+        position: relative;
+    }
+    .fluid .panel {
+        width: 75%;
+        margin-left: 15%;
+        opacity: 0.8;
+        display: flex;
+        background-color: black;
+    }
+    .fluid .fixed {
+        margin: 0;
+        position: fixed;
+        top: 0;
+        width: 100%;
+      }
+    .panel .server {
+        margin-left: 35%;
+        font-size: 25px;
+        color: whitesmoke;
+    }
+    .panel .chapter-chap {
+        margin-left: 30px;
+    }
+    .chapter-chap .list{
+        font-size: 20px;
+        padding-top: 10px;
+        padding-right: 20px;
+        color: whitesmoke;
+    }
+    .chapter-chap .right{
+        font-size: 20px;
+        padding-left: 10px;
+        padding-right: 20px;
+        color: whitesmoke;
+        padding-bottom: 5px;
+    }
+    .chapter-chap .left{
+        font-size: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
+        color: whitesmoke;
+        padding-bottom: 5px;
+    }
+    .chapter-chap .arrow-disabled {
+        padding-left: 30px;
+    }
+    .chapter-chap select {
+        margin-bottom: 5px;
+    }
+    .panel .home-panel{
+        font-size: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
+        color: whitesmoke;
+        padding-bottom: 10px;
+        padding-top: 5px;
+    }
+    .panel .panel-report{
+        font-size: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
+        color: whitesmoke;
+        padding-bottom: 5px;
+        padding-top: 5px;
+    }
+    .fluid .viewer{
+        width: 600px;
+        margin-left: 30%;
+        margin-top: 10px;
+    }
+    .viewer img {
+        width: 100%;
+    }
+    .fluid .button-change{
+        display: flex;
+        margin-left: 40%;
+    }
+    .button-change .button-next {
+        width: 125px;
+        height: 37px;
+        text-align: center;
+        padding-top: 5px;
+       margin-top: 30px;
+       margin-left: 25px;
+       margin-bottom: 20px;
+       box-sizing: border-box;
+       border-radius: 5px;
+       background-color: #f50057;
+    }
+    .button-next a {
+        color: whitesmoke;
+        text-decoration: none;
+    }
+    .button-change .button-previous{
+        text-align: center;
+        float: left;
+        width: 125px;
+        height: 37px;
+        text-align: center;
+       padding-top: 5px;
+       margin-top: 30px;
+       margin-bottom: 20px;
+       box-sizing: border-box;
+       border-radius: 5px;
+       background-color: #f50057;
+    }
+    .button-previous a {
+        color: whitesmoke;
+        text-decoration: none;
+    }
+    .button-next a:hover{
+        color: #333;
+        box-shadow: none;
+        border: none;
+        outline: none;
+    }
+    .button-previous a:hover{
+        box-shadow: none;
+        border: none;
+        outline: none;
+        color: #333;
+    }
+    .fluid .button-disabled{
+       margin-left: 10%
+    }
+    .main .rum {
+        width: 76.5%;
+        margin-left: 13.5%;
+       height: 50px;
+       padding-left: 20px;
+       padding-bottom: 55px;
+    }
+    .fluid .main {
+        width: 100%;
+        background-color: rgb(235, 231, 224);
+    }
+    .main .rum a {
+        text-decoration: none;
+        color: #8c8383;
+    }
+    .main .rum a:hover{
+        color: #f50057;
+    }
+    #myElement {
+        transition: all 0.3s ease;
+        background-color: black;
+        color: aliceblue;
+        /* Định dạng khác cho phần tử */
+      }
+      .scroll-top {
+        position: fixed;
+        bottom: 30px;
+        right: 10px;
+        width: 30px;
+        height: 30px;
+        border-radius: 30px;
+        z-index: 10000;
+        text-align: center;
+        line-height: 30px;
+        opacity: 0.4;
+        cursor: pointer;
+    }
+    
+    
+    .scroll-top img {
+        margin: 0 auto;
+        fill: #fff;
+        width: 30px;
+        height: 30px;
+    }
+    
+</style>
+    <!-- JS -->
+
+    
+
+    <!-- script boosttrap -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous">
+    </script>
+    <script>
+        function handleSelect(selectElement) {
+            var selectedChapterId = selectElement.value;
+            window.location.href = "/comic/chapter/" + selectedChapterId;
+          }
+          
+    // Get the button
+    let mybutton = document.getElementById("back-to-top");
+        
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function() {scrollFunction()};
+        
+    function scrollFunction() {
+        if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+        }
+        
+    // When the user clicks on the button, scroll to the top of the document
+    function topFunction() {
+          document.body.scrollTop = 0;
+          document.documentElement.scrollTop = 0;
+        }
+
+        window.addEventListener("scroll", function() {
+            var element = document.getElementById("myElement");
+            var rect = element.getBoundingClientRect();
+          
+            if (window.pageYOffset >= 30) {
+              element.classList.add("fixed");
+            } else {
+              element.classList.remove("fixed");
+            }
+          });
+          const searchForm = document.getElementById('searchForm');
+          const searchInput = document.getElementById('searchInput');
+          
+          searchForm.addEventListener('submit', (event) => {
+            event.preventDefault(); // Ngăn chặn submit form mặc định
+            
+            const keyword = searchInput.value.trim(); // Lấy từ khóa từ input và loại bỏ khoảng trắng đầu và cuối
+            
+            if (keyword !== '') {
+              const url = `/list?keyword=${keyword}`;
+              window.location.href = url;
+            }
+          });
+          const searchInput1 = document.querySelector('.form-control'); // Lấy thẻ input nhập liệu
+          const searchResults = document.querySelector('.comic-result'); // Lấy phần tử hiển thị kết quả
+          
+          searchInput1.addEventListener('input', async (event) => {
+            const keyword = event.target.value; // Lấy giá trị từ input
+            try {
+              const encodedKeyword = encodeURIComponent(keyword); // Mã hóa keyword
+              const response = await fetch(`/search?keyword=${encodedKeyword}`); // Gửi request tới server
+              const comics = await response.json(); // Chuyển đổi response thành dữ liệu JSON
+              // Xóa các kết quả hiện tại trong hộp hiển thị
+              searchResults.innerHTML = '';
+               // Kiểm tra từ khóa có rỗng hay không
+               if (keyword.trim() === '') {
+                return; // Nếu từ khóa rỗng, không hiển thị kết quả
+              }
+              // Tạo các phần tử HTML để hiển thị kết quả
+              comics.forEach((comic) => {
+                const resultItem = document.createElement('div');
+                resultItem.classList.add('mini-comic');
+                resultItem.innerHTML = `
+                  <div class="mini-pic">
+                    <a href="/comic/${comic._id}"><img src="${comic.image}" alt=""></a>
+                  </div>
+                  <div class="mini-content">
+                    <a href="/comic/${comic._id}">${comic.name}</a>
+                    <br>
+                    <a href="/comic/chapter/${comic.chapters[comic.chapters.length - 1]._id}">Chương ${comic.chapters.length}</a>
+                  </div>
+                `;
+                searchResults.appendChild(resultItem);
+              });
+            } catch (error) {
+              console.error(error);
+            }
+          });
+      //user
+if ('<%= userTitle %>'){
+    const targetElement = document.querySelector('.user-login');
+  const hiddenElement = document.querySelector('.user-info');
+  
+  targetElement.addEventListener('mouseover', function() {
+    hiddenElement.style.display = 'block';
+  });
+  hiddenElement.addEventListener('mouseover', function() {
+      hiddenElement.style.display = 'block';
+    });
+  
+  targetElement.addEventListener('mouseleave', function() {
+    hiddenElement.style.display = 'none';
+  });
+  hiddenElement.addEventListener('mouseleave', function() {
+      hiddenElement.style.display = 'none';
+    });
+  }
+//comment
+
+  function deleteCmt(commentId) {
+    fetch(`/comments/${commentId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        const comment = document.querySelector('.cmt-sus');
+  
+        if (comment) {
+          // Hiển thị thông báo đã xóa bình luận
+          comment.innerHTML = 'Đã xóa bình luận.';
+        }
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  }
+  
+  if ( '<%= ecmt %>' ) {
+    const repCmt = document.querySelectorAll('.rep-cmt');
+    repCmt.forEach((element) => {
+      element.addEventListener('click', function(event) {
+        if (!'<%= userTitle %>') {
+          event.preventDefault();
+          alert('Bạn cần đăng nhập để thực hiện chức năng này.');
+        }
+      });
+    }); 
+  }
+  const submitCmt = document.querySelector('.btn-sm');
+  submitCmt.addEventListener('click',function(event) {
+    const content = document.getElementById("exampleFormControlTextarea1").value.trim();
+    if (!'<%= userTitle %>') {
+      event.preventDefault(); // Ngăn chặn việc gửi dữ liệu đánh giá nếu chưa đăng nhập
+      // Hiển thị thông báo trong một phần tử HTML
+      document.getElementById("exampleFormControlTextarea1").value = "";
+        // Hiển thị alert
+      alert('Bạn cần đăng nhập để thực hiện chức năng này.');
+  }
+  });
+  
+  if ('<%= userTitle %>') {
+    const subint = document.querySelector('.text-box');
+    const subcmt = document.querySelector('.btn-sm');
+    subcmt.addEventListener('click', handleCommentClick);
+  
+    function handleCommentClick(event) {
+      const content = document.getElementById("exampleFormControlTextarea1").value.trim();
+      if (content === "") {
+        // Hiển thị thông báo hoặc thực hiện các hành động khác khi giá trị content trống
+        alert("Nội dung bình luận không được để trống");
+        return;
+      }
+  
+      document.getElementById("exampleFormControlTextarea1").value = "";
+      const comicId = '<%= idComic %>';
+      const chapterId = '<%= chapter ? chapter.id : "" %>';
+      saveCommentToServer(content, comicId, chapterId);
+      const alertTimeout = setTimeout(() => {
+        alert("Bình luận đã được lưu trữ.");
+      }, 1000);
+  
+      // Sau 1 giây, hàm dưới đây sẽ được gọi để đóng alert
+      setTimeout(() => {
+        clearTimeout(alertTimeout); // Hủy bỏ hàm setTimeout gọi alert
+      }, 2000);
+    }
+  
+    function saveCommentToServer(content, comicId, chapterId) {
+      // Gửi yêu cầu AJAX để lưu bình luận
+      fetch(`/comic/${comicId}/save-comment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content, chapterId }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Bình luận đã được lưu trữ:', data);
+        // Thực hiện các xử lý khác sau khi lưu bình luận thành công
+      })
+      .catch(error => {
+        console.error('Lỗi khi lưu bình luận:', error);
+      });
+    }
+  }
+
+  function repCmt(commentId) {
+    if ('<%= userTitle %>') {
+      let formRepCmt = `
+        <form class="formCmt">
+          <div class="form-group position-relative">
+            <div class="input-group">
+              <textarea id="answering" class="form-control" placeholder="..." rows="1" contenteditable="true"></textarea>
+              <div class="input-group-append">
+                <button type="button" class="btn btn-primary btn-sm btnRCmt">gửi</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      `;
+      let closestActionCmt = event.target.closest('.action-cmt');
+      closestActionCmt.insertAdjacentHTML('beforeend', formRepCmt);
+      
+      let answeringTextarea = closestActionCmt.querySelector('#answering');
+      answeringTextarea.focus();
+      
+      answeringTextarea.style.height = answeringTextarea.scrollHeight + 'px';
+      answeringTextarea.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = this.scrollHeight + 'px';
+      });
+      
+      answeringTextarea.removeAttribute('id');
+      
+      document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('btnRCmt')) {
+          let formCmt = event.target.closest('.formCmt');
+          let textarea = formCmt.querySelector('textarea');
+          let content = textarea.value;
+          const parentId = commentId;
+          const comicId = '<%= idComic %>';
+          const chapterId = '<%= chapter ? chapter.id : "" %>';
+    
+          if (content.trim() === '') {
+            alert('Nội dung repcomment không được để trống');
+            return;
+          }
+          console.log(parentId)
+          saveCommentToServer(content, comicId, chapterId, parentId);
+          textarea.value = ''; // Xóa nội dung trong trường textarea
+    
+          const alertTimeout = setTimeout(() => {
+            alert("Bình luận đã được lưu trữ.");
+          }, 0); // 1000 milliseconds = 0 second
+    
+          // Sau 1 giây, hàm dưới đây sẽ được gọi để đóng alert
+          setTimeout(() => {
+            clearTimeout(alertTimeout); // Hủy bỏ hàm setTimeout gọi alert
+          }, 2000); // 2000 milliseconds = 2 seconds
+        }
+      });
+    
+      function saveCommentToServer(content, comicId, chapterId, parentId) {
+        // Gửi yêu cầu AJAX để lưu repcomment
+        fetch(`/comic/${comicId}/save-comment`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ content, chapterId, parentId }),
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log('Bình luận đã được lưu trữ:', data);
+            // Thực hiện các xử lý khác sau khi lưu repcomment thành công
+          })
+          .catch(error => {
+            console.error('Lỗi khi lưu repcomment:', error);
+          });
+      }
+    }
+  }
+  // Show comment
+var showAll = document.getElementById("showAll");
+var cmt = document.querySelectorAll('.text-body');
+
+var defaultCmtCount = 5;
+for (var i = defaultCmtCount; i < cmt.length; i++) {
+  cmt[i].style.display = "none";
+}
+
+if (cmt.length <= defaultCmtCount) {
+  if (showAll && showAll.parentNode) {
+    showAll.parentNode.removeChild(showAll);
+  }
+}
+
+function showAllCmt() {
+  if (showAll) {
+    for (var i = 0; i < cmt.length; i++) {
+      cmt[i].style.display = "block";
+    }
+    if (showAll.parentNode) {
+      showAll.parentNode.removeChild(showAll);
+    }
+  }
+}
+  
+    </script>
+    
+</body>
+</html>

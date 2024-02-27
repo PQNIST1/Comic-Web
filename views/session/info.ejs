@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/all.css">
+    <style>
+        .m-container{
+            margin-top: 100px;
+            width: 500px;
+            box-sizing: border-box;
+            border: 1px solid black;
+            padding-bottom: 10px;
+            border-radius: 10px;
+        }
+        h1 {
+            text-align: center;
+        }
+        button {
+            width: 470px;
+            margin-bottom: 10px;
+        }
+        a {
+            text-decoration: none;
+            color: white;
+        }
+        .a:hover{
+            text-decoration: none;
+            color: white;
+        }
+        span {
+            font-weight: normal;
+        }
+        h5 {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container m-container">
+        <h1>User Info</h1>
+            <h5>Name: <span><%= user.name %></span></h5>
+            <h5>Email:  <span><%= user.email %></span></h5>
+            <h5>Password:  <span><%= user.password %></span></h5>
+            <button  class="btn btn-primary"><a class="a" href="/change">Change</a></button>
+            <button  class="btn btn-primary"><a  class="a" href="/">Back</a></button>
+    </div>
+    
+
+
+    <script src="js/jquery.slim.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/all.js"></script>
+</body>
+</html>
+

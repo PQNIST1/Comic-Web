@@ -1,0 +1,191 @@
+<%- include("layout/header.ejs") %>
+<div class="breadcrumb container">
+    <li class="breadcrumb-item"><a href="/"><i class="fa-solid fa-house"></i> Trang Chủ</a></li>
+    <li class="breadcrumb-item"><a href="/list">Truyện</a></li>
+    <li class="breadcrumb-item"><a href="/history">Truyện Đã Đọc</a></li>
+<div class="main-content">
+<div class="comic-search container">
+    <% if (comicList.length > 0) { %>
+        <% comicList.forEach(comic => { %>
+         <div class="item info" style="width: 165px; height: 295px; margin-top: 15px;">
+    <div class="card-1" style="width: 165px; height: 295px;">
+      <div class="comic">
+        <a href="/comic/<%= comic.comicId %>">
+          <img src="<%= comic.image %>" class="card-img-top" alt="..." />
+        </a>
+      </div>
+      <div class="title" style="width: 165px; height: 35px;">
+        <a href="/comic/<%= comic.comicId %>"><%= comic.name %></a>
+      </div>
+    </div>
+        </div>
+        <% }); %>
+  <% } %>
+</div>
+</div>   
+
+<style>
+* {
+padding: 0;
+margin: 0;
+}
+
+.breadcrumb {
+height: 40px;
+margin-top: 3px;
+line-height: 40px;
+margin-bottom: 3px;
+box-shadow: 0 2px 5px rgba(24, 23, 23, 0.2);
+background-color: white;
+}
+.breadcrumb li{
+padding-left: 15px;
+}
+.breadcrumb a{
+text-decoration: none;
+color: #8c8383;
+}
+.breadcrumb a:hover{
+color: #ff3e83a3;
+}
+.container {
+max-width: 1200px;
+min-width: 375px;
+margin-right: auto;
+margin-left: auto;
+}
+.main-content {
+width: 100%;
+margin: auto;
+position: relative;
+margin-top: 5px;
+box-shadow: 0 2px 5px rgba(0, 0, 0, .2);
+background-color: white;
+}
+.main-content .comic-search{
+flex-wrap: wrap;
+justify-content: flex-start;
+width: 90%;
+display: flex;
+}
+.comic {
+width: 165px;
+height: 225px;
+overflow: hidden;
+position: relative;
+box-sizing: border-box;
+border-radius: 5px;
+}
+.comic img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+transition: transform 0.3s ease;
+} 
+.comic img:hover {
+transform: scale(1.1); /* Scale hình */
+transform-origin: center center;
+}
+.card-body a:hover {
+color: #a06197;
+text-decoration: none;
+}
+.title a {
+text-decoration: none;
+color: #81818e;
+cursor: pointer;
+font-size: 13px;
+display: inline-block;
+overflow: hidden;
+text-overflow: ellipsis;
+font-weight: bold;
+line-height: normal;
+}
+.item{
+margin-right: 10px;
+}
+</style>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+crossorigin="anonymous">
+</script>
+<script>
+  const targetElement = document.querySelector('.user-login');
+const hiddenElement = document.querySelector('.user-info');
+
+targetElement.addEventListener('mouseover', function() {
+  hiddenElement.style.display = 'block';
+});
+hiddenElement.addEventListener('mouseover', function() {
+    hiddenElement.style.display = 'block';
+  });
+
+targetElement.addEventListener('mouseleave', function() {
+  hiddenElement.style.display = 'none';
+});
+hiddenElement.addEventListener('mouseleave', function() {
+    hiddenElement.style.display = 'none';
+  });
+  
+  const searchForm = document.getElementById('searchForm');
+  const searchInput = document.getElementById('searchInput');
+  
+  searchForm.addEventListener('submit', (event) => {
+    event.preventDefault(); // Ngăn chặn submit form mặc định
+    
+    const keyword = searchInput.value.trim(); // Lấy từ khóa từ input và loại bỏ khoảng trắng đầu và cuối
+    
+    if (keyword !== '') {
+      const url = `/list?keyword=${keyword}`;
+      window.location.href = url;
+    }
+  });
+  
+  const searchInput1 = document.querySelector('.form-control'); // Lấy thẻ input nhập liệu
+  const searchResults = document.querySelector('.comic-result'); // Lấy phần tử hiển thị kết quả
+  
+  searchInput1.addEventListener('input', async (event) => {
+    const keyword = event.target.value; // Lấy giá trị từ input
+    try {
+      const encodedKeyword = encodeURIComponent(keyword); // Mã hóa keyword
+      const response = await fetch(`/search?keyword=${encodedKeyword}`); // Gửi request tới server
+      const comics = await response.json(); // Chuyển đổi response thành dữ liệu JSON
+      // Xóa các kết quả hiện tại trong hộp hiển thị
+      searchResults.innerHTML = '';
+       // Kiểm tra từ khóa có rỗng hay không
+       if (keyword.trim() === '') {
+        return; // Nếu từ khóa rỗng, không hiển thị kết quả
+      }
+      // Tạo các phần tử HTML để hiển thị kết quả
+      comics.forEach((comic) => {
+        const resultItem = document.createElement('div');
+        resultItem.classList.add('mini-comic');
+        resultItem.innerHTML = `
+          <div class="mini-pic">
+            <a href="/comic/${comic._id}"><img src="${comic.image}" alt=""></a>
+          </div>
+          <div class="mini-content">
+            <a href="/comic/${comic._id}">${comic.name}</a>
+            <br>
+            <a href="/comic/chapter/${comic.chapters[comic.chapters.length - 1]._id}">Chương ${comic.chapters.length}</a>
+          </div>
+        `;
+        searchResults.appendChild(resultItem);
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  });
+</script>
+</body>
+
+</html>

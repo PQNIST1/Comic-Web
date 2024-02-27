@@ -1,0 +1,921 @@
+<%- include("layout/header.ejs") %>
+<section class="breadcrumb container">
+    <span>
+        <span to="/danh-sach">
+            <svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z">
+                </path>
+            </svg>
+            Danh Sách Truyện
+        </span>
+    </span>
+</section>
+<section class="main-content">
+    <section class="comic-search-section container" style="padding-left: 0px;">
+        <div class="comic-search-option">
+            <div class="category">
+                <div class="tab <% if (type === 'recently-updated') { %>tab-pro<% } %>"><a href="/list?type=recently-updated">Gần đây</a></div>
+                <div class="tab <% if (type === 'newest') { %>tab-pro<% } %>"><a href="/list?type=newest">Truyện mới</a></div>
+                <div class="tab <% if (type === 'most-viewed') { %>tab-pro<% } %>"><a href="/list?type=most-viewed"> Lượt xem</a></div>
+            </div>
+            <div class="paging">
+                <% if (currentPage > 1) { %> 
+                      <button class="btn btn-light">
+                        <a href="/list?page=<%= currentPage - 1 %>&type=<%= type %>&category=<%= category %>&keyword=<%= keyword %>">Trước</a>
+                    </button>
+                  <% } else { %>
+                    <button class="btn btn-light btn-disable">Trước</button>
+                  <% } %>
+                  <% if (currentPage < totalPages) { %>
+                      <button class="btn btn-light ">
+                        <a href="/list?page=<%= currentPage + 1 %>&type=<%= type %>&category=<%= category %>&keyword=<%= keyword %>">Sau</a>
+                    </button>
+                  <% } else { %>
+                    <button class="btn btn-light btn-disable ">Sau</button>
+                  <% } %>                  
+            </div>
+        </div>
+        <div class="comic-search">
+            <section class="category-section">
+                <fieldset>
+                    <legend>Thể loại</legend>
+                    <div class="arrow active">
+                        <svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M7 10l5 5 5-5z"></path>
+                        </svg>
+                    </div>
+                    <ul class="categories" style="padding-left: 1px;">
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Anime</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Drama</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Josei</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Manhwa</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">One Shot</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Shounen</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Webtoons</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Shoujo</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Harem</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Ecchi</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Mature</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Slice of life</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Isekai</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Manga</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Manhua</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Hành Động</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Phiêu Lưu</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Hài Hước</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Võ Thuật</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Huyền Bí</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Lãng Mạn</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Thể Thao</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Học Đường</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Lịch Sử</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Kinh Dị</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Siêu Nhiên</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Bi Kịch</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Trùng Sinh</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Game</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Viễn Tưởng</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Khoa Học</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Truyện Màu</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Người Lớn</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">BoyLove</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Hầm Ngục</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Săn Bắn</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Ngôn Từ Nhạy Cảm</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Doujinshi</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Bạo Lực</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Ngôn Tình</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Nữ Cường</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Gender Bender</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Murim</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Leo Tháp</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="MuiChip-root">
+                                <span class="MuiChip-label">Nấu Ăn</span>
+                            </div>
+                        </li>
+                    </ul>
+                </fieldset>
+            </section>
+            <section class="comic-list">
+                <div class="list">
+                    <% if (comics.length === 0) { %>
+                        <div id="result">Không tìm thấy kết quả</div>
+                    <% } %>
+                    <% function formatNumberWithCommas(number) {
+                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                      } %>                                        
+                    <% comics.forEach((comic) => { %>
+                    <div class="MuiPaper-root MuiCard-root card-root MuiPaper-elevation1 MuiPaper-rounded">
+                        <button class="MuiButtonBase-root MuiCardActionArea-root" tabindex="0" type="button" onclick="readComic( '<%= comic._id %>' )">
+                            <img class="MuiCardMedia-root card-media MuiCardMedia-media MuiCardMedia-img"
+                                src="<%= comic.image %>"
+                                title="">
+                            <div class="info-comic">
+                                <span class="item-info">
+                                    <svg focusable="false" viewBox="0 0 24 24" aria-hidden="true"
+                                        data-testid="RemoveRedEyeIcon">
+                                        <path
+                                            d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z">
+                                        </path>
+                                    </svg><%= formatNumberWithCommas(comic.views) %><svg focusable="false" viewBox="0 0 24 24" aria-hidden="true"
+                                        tabindex="-1" title="DirectionsWalk" data-ga-event-category="material-icons"
+                                        data-ga-event-action="click" data-ga-event-label="DirectionsWalk">
+                                        <path
+                                            d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7">
+                                        </path>
+                                    </svg><%= comic.followers.length %></span>
+                            </div>
+                            <div class="MuiCardContent-root"><%= comic.name %></div>
+                            <span class="MuiCardActionArea-focusHighlight"></span>
+                            <span class="MuiTouchRipple-root"></span>
+                        </button>
+                    </div>
+                    <% }); %>
+                </div>
+            </section>
+        </div>
+        <section class="paging-section">
+            <div class="paging" style="padding-left: 10px;">
+                <% if (currentPage > 1) { %> 
+                    <button class="btn btn-light">
+                      <a href="/list?page=<%= currentPage - 1 %>&type=<%= type %>&category=<%= category %>&keyword=<%= keyword %>">Trước</a>
+                  </button>
+                <% } else { %>
+                  <button class="btn btn-light btn-disable">Trước</button>
+                <% } %>
+                <% if (currentPage < totalPages) { %>
+                    <button class="btn btn-light ">
+                      <a href="/list?page=<%= currentPage + 1 %>&type=<%= type %>&category=<%= category %>&keyword=<%= keyword %>">Sau</a>
+                  </button>
+                <% } else { %>
+                  <button class="btn btn-light btn-disable ">Sau</button>
+                <% } %>    
+            </div>
+        </section>
+    </section>
+</section>
+<style>
+   
+   #result {
+    text-align: center;
+    color: #585151;
+    font-size: larger;
+    margin-left: 40%;
+    font-weight: bold;
+   }
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    .breadcrumb {
+        height: 40px;
+        line-height: 40px;
+        margin-top: 3px;
+        margin-bottom: 3px;
+        box-shadow: 0 2px 5px rgba(24, 23, 23, 0.2);
+        background-color: white;
+    }
+
+    .container {
+        max-width: 1200px;
+        min-width: 375px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .breadcrumb>span,
+    .breadcrumb>span>span {
+        height: 40px;
+    }
+
+    .breadcrumb>span {
+        margin-left: 10px;
+    }
+
+    .breadcrumb>span>span:last-of-type {
+        color: #f986c6;
+    }
+
+    .breadcrumb>span>span>a>svg,
+    .breadcrumb>span>span>svg {
+        vertical-align: text-top;
+    }
+
+    .MuiSvgIcon-root {
+        fill: currentColor;
+        width: 1em;
+        height: 1em;
+        display: inline-block;
+        font-size: 1.5rem;
+        transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+        flex-shrink: 0;
+        user-select: none;
+    }
+
+    section {
+        display: block;
+    }
+
+    .main-content {
+        margin: auto;
+        position: relative;
+        overflow-y: hidden;
+    }
+
+    .comic-search-section {
+        box-shadow: 0 2px 5px rgba(0, 0, 0, .2);
+        background-color: white;
+        overflow-y: hidden;
+    }
+
+    .container {
+        max-width: 1200px;
+        min-width: 375px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .comic-search-section>.comic-search-option {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    .comic-search-section>.comic-search {
+        width: 100%;
+        display: flex;
+        flex-wrap: nowrap;
+        flex-direction: row-reverse;
+    }
+
+    .comic-search-section>.comic-search>.comic-list {
+        width: 80%;
+    }
+
+    .comic-search-section>.comic-search>.category-section>fieldset {
+        border: 3px solid #8080807d;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, .2);
+    }
+
+    .comic-search-section>.comic-search>.category-section>fieldset>legend {
+        margin-left: 15px;
+        font-size: 15px;
+        color: #2196F3;
+        font-weight: 700;
+    }
+
+    .comic-search-section>.comic-search>.category-section>fieldset>.arrow {
+        display: none;
+    }
+
+    .comic-search-section>.comic-search>.category-section>fieldset>.categories {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .MuiSvgIcon-root {
+        fill: currentColor;
+        width: 1em;
+        height: 1em;
+        display: inline-block;
+        font-size: 1.5rem;
+        transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+        flex-shrink: 0;
+        user-select: none;
+    }
+
+    .comic-search-section>.comic-search>.category-section>fieldset>.categories>li {
+        min-width: 70px;
+    }
+
+    .comic-search-section>.comic-search>.category-section>fieldset>.categories>li.active>div {
+        background-color: #2196f3b5;
+        color: #fdfeff;
+    }
+
+    .comic-search-section>.comic-search>.category-section>fieldset>.categories>li>div {
+        margin: 4px 5px;
+        min-width: 70px;
+        text-align: center;
+        color: #2196F3;
+        background-color: white;
+    }
+
+    .comic-search-section>.comic-search-option>.paging {
+        display: flex;
+        flex-wrap: wrap;
+        margin-left: 15px;
+        margin-top: 5px;
+        
+    }
+    .paging a{
+        color: #585151;
+    }
+.paging a:hover{
+    text-decoration: none;
+}
+    .comic-search-section>.comic-search-option>.paging>button,
+    .comic-search-section>.paging-section>.paging>button {
+        width: 105px;
+        margin-right: 14px;
+        height: 30px;
+        line-height: 18px;
+        margin-bottom: 10px;
+    }
+
+    .btn-disable {
+        background-color: #9aa0a0 !important;
+        color: #4a484885 !important;
+        cursor: not-allowed;
+    }
+
+    .btn-page {
+        background-color: transparent;
+        cursor: pointer;
+        text-decoration: none;
+        color: #000;
+    }
+
+    .comic-search-section>.comic-search-option>.category {
+        display: flex;
+        flex-wrap: wrap;
+        margin-left: 10px;
+    }
+
+    .btn {
+        padding: 0.3rem 0.75rem;
+        display: inline-block;
+        font-weight: 400;
+        text-align: center;
+        cursor: pointer;
+        text-decoration: none;
+        border-radius: 5px;
+        box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+        border: 1px solid transparent;
+        color: white;
+        line-height: 1.5;
+        font-size: 1rem;
+    }
+
+    .MuiChip-root {
+        color: rgba(0, 0, 0, 0.87);
+        border: none;
+        cursor: default;
+        height: 32px;
+        display: inline-flex;
+        outline: 0;
+        padding: 0;
+        font-size: 0.8125rem;
+        box-sizing: border-box;
+        transition: background-color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+        align-items: center;
+        font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+        white-space: nowrap;
+        border-radius: 16px;
+        vertical-align: middle;
+        justify-content: center;
+        text-decoration: none;
+        background-color: #e0e0e0;
+    }
+
+    .comic-list {
+        margin: 0 5px 5px 5px;
+        padding-bottom: 5px;
+    }
+
+    .MuiChip-label {
+        overflow: hidden;
+        white-space: nowrap;
+        padding-left: 12px;
+        padding-right: 12px;
+        text-overflow: ellipsis;
+        border-radius: 16px;
+        line-height: 32px;
+    }
+    
+    .comic-search-section > .comic-search {
+        width: 100%;
+        display: flex;
+        flex-wrap: nowrap;
+        flex-direction: row-reverse;
+    }
+
+    .comic-search-section>.comic-search>.category-section>fieldset>.categories>li>div {
+        margin: 4px 5px;
+        min-width: 70px;
+        text-align: center;
+        color: #2196F3;
+        background-color: white;
+    }
+
+    .comic-search-section>.comic-search>.category-section {
+        width: 204px;
+        min-width: 200px;
+        font-size: 15px;
+        color: red;
+        font-weight: 600;
+        margin: 0 auto;
+        padding: 10px 0 5px 0;
+    }
+
+    .comic-search-section>.comic-search>.comic-list {
+        width: 85%;
+    }
+
+    .comic-search-section>.comic-search>.comic-list>.list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+    .comic-search-section>.comic-search>.comic-list>.list>.card-root {
+        width: 175px;
+        height: 295px;
+        margin-right: 8px;
+        margin-left: 8px;
+        margin-bottom: 10px;
+    }
+
+    .comic-search-section>.comic-search-option>.category>.tab {
+        margin: 3px;
+        padding: 4px;
+        color: #585151;
+        width: 100px;
+        text-align: center;
+        font-weight: 600;
+        border: 1px solid #6797bd;
+        border-radius: 5px;
+    }
+    .tab a{
+        color: #585151; 
+    }
+    .tab a:hover {
+        text-decoration: none;
+        color: white;
+    }
+    .tab-pro {
+        background-color: #2196F3;
+        color: white;
+    }
+    .tab-pro a{
+        color: white;
+    }
+
+    .comic-search-section>.comic-search-option>.category>.tab:hover {
+        background-color: #2196F3;
+        color: white;
+    }
+
+    .MuiCard-root {
+        overflow: hidden;
+    }
+
+    .MuiPaper-elevation1 {
+        box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+    }
+
+    .MuiPaper-rounded {
+        border-radius: 4px;
+    }
+
+    .MuiPaper-root {
+        color: rgba(0, 0, 0, 0.87);
+        transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+        background-color: #fff;
+    }
+
+    .MuiCardActionArea-root {
+        width: 100%;
+        display: block;
+        text-align: inherit;
+    }
+
+    .MuiButtonBase-root {
+        color: inherit;
+        border: 0;
+        cursor: pointer;
+        margin: 0;
+        display: inline-flex;
+        outline: 0;
+        padding: 0;
+        position: relative;
+        align-items: center;
+        user-select: none;
+        border-radius: 0;
+        vertical-align: middle;
+
+        justify-content: center;
+        text-decoration: none;
+        background-color: transparent;
+
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .comic-search-section>.comic-search>.comic-list>.list>.card-root .MuiCardMedia-img {
+        height: 250px;
+    }
+
+    .MuiCardMedia-img {
+        object-fit: cover;
+    }
+
+    .MuiCardMedia-media {
+        width: 100%;
+    }
+
+    .MuiCardMedia-root {
+        display: block;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    .comic-search-section>.comic-search>.comic-list>.list>.card-root .info-comic {
+        position: relative;
+    }
+
+    .comic-search-section>.comic-search>.comic-list>.list>.card-root .MuiCardContent-root {
+        padding: 7px;
+        color: #81818e;
+        font-size: 14px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        height: 25px;
+        overflow: hidden;
+    }
+
+    .MuiCardContent-root {
+        padding: 16px;
+    }
+
+    .MuiCardActionArea-focusHighlight {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+        border-radius: inherit;
+        pointer-events: none;
+        background-color: currentcolor;
+    }
+
+    .MuiTouchRipple-root {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 0;
+        overflow: hidden;
+        position: absolute;
+        border-radius: inherit;
+        pointer-events: none;
+    }
+
+    .comic-search-section>.comic-search>.comic-list>.list>.card-root .info-comic>.item-info {
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 20px;
+        line-height: 20px;
+        padding-left: 2px;
+        padding-right: 2px;
+        font-size: 12px;
+        display: inline-flex;
+        color: #fff;
+        background-color: #000;
+        opacity: .5;
+    }
+
+    .comic-search-section>.comic-search>.comic-list>.list>.card-root .info-comic>.item-info>svg {
+        fill: white;
+        width: 15px;
+        margin-right: 5px;
+        margin-left: 5px;
+    }
+
+    .comic-search-section>.comic-search>.comic-list>.list>.card-root .MuiCardContent-root {
+        padding: 7px;
+        color: #81818e;
+        font-size: 14px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        height: 25px;
+        overflow: hidden;
+    }
+
+    .MuiChip-root .MuiChip-label:hover {
+        background-color: #2196F3;
+        color: white;
+        border-radius: 16px;
+        line-height: 32px;
+    }
+
+    .MuiCardActionArea-root {
+        width: 100%;
+        display: block;
+        text-align: inherit;
+    }
+
+    .MuiPaper-root:hover {
+        width: 250px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+    .elevation1:hover {
+        color: #f986c6;
+    }
+</style>
+<script>
+    function readComic(comicId) {
+        window.location.href = "/comic/" + comicId;
+      }
+      // Lấy danh sách tất cả các thẻ span chứa danh mục
+    const categorySpans = document.querySelectorAll('.MuiChip-label');
+
+    // Đăng ký sự kiện click cho mỗi thẻ span
+    categorySpans.forEach(span => {
+    span.addEventListener('click', () => {
+        const category = span.textContent;
+        const url = `/list?category=${category}`;
+        window.location.href = url;
+    });
+    });
+    document.addEventListener("DOMContentLoaded", function() {
+        const category = "<%= category %>"; // Lấy giá trị của tham số truy vấn "type"
+    
+        const categorySpans = document.querySelectorAll('.MuiChip-label');
+        categorySpans.forEach(span => {
+          // Kiểm tra nếu thẻ span có cùng tên category thì thêm class "tab-pro"
+          if (span.textContent.toLowerCase() === category.toLowerCase()) {
+            span.classList.add('tab-pro');
+          }
+        });
+      });
+
+//search
+      const searchForm = document.getElementById('searchForm');
+const searchInput = document.getElementById('searchInput');
+
+searchForm.addEventListener('submit', (event) => {
+  event.preventDefault(); // Ngăn chặn submit form mặc định
+  
+  const keyword = searchInput.value.trim(); // Lấy từ khóa từ input và loại bỏ khoảng trắng đầu và cuối
+  
+  if (keyword !== '') {
+    const url = `/list?keyword=${keyword}`;
+    window.location.href = url;
+  }
+});
+const searchInput1 = document.querySelector('.form-control'); // Lấy thẻ input nhập liệu
+const searchResults = document.querySelector('.comic-result'); // Lấy phần tử hiển thị kết quả
+
+searchInput1.addEventListener('input', async (event) => {
+  const keyword = event.target.value; // Lấy giá trị từ input
+  try {
+    const encodedKeyword = encodeURIComponent(keyword); // Mã hóa keyword
+    const response = await fetch(`/search?keyword=${encodedKeyword}`); // Gửi request tới server
+    const comics = await response.json(); // Chuyển đổi response thành dữ liệu JSON
+    // Xóa các kết quả hiện tại trong hộp hiển thị
+    searchResults.innerHTML = '';
+     // Kiểm tra từ khóa có rỗng hay không
+     if (keyword.trim() === '') {
+      return; // Nếu từ khóa rỗng, không hiển thị kết quả
+    }
+    // Tạo các phần tử HTML để hiển thị kết quả
+    comics.forEach((comic) => {
+      const resultItem = document.createElement('div');
+      resultItem.classList.add('mini-comic');
+      resultItem.innerHTML = `
+        <div class="mini-pic">
+          <a href="/comic/${comic._id}"><img src="${comic.image}" alt=""></a>
+        </div>
+        <div class="mini-content">
+          <a href="/comic/${comic._id}">${comic.name}</a>
+          <br>
+          <a href="/comic/chapter/${comic.chapters[comic.chapters.length - 1]._id}">Chương ${comic.chapters.length}</a>
+        </div>
+      `;
+      searchResults.appendChild(resultItem);
+    });
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+
+const linkElement = document.getElementById('linkElement');
+const linkElementt = document.getElementById('linkElementt');
+const currentPath = window.location.pathname;
+
+if (currentPath === '/list') {
+  linkElementt.classList.add('link');
+} else if (currentPath === '/') {
+  linkElement.classList.add('link');
+}
+const targetElement = document.querySelector('.user-login');
+const hiddenElement = document.querySelector('.user-info');
+
+targetElement.addEventListener('mouseover', function() {
+  hiddenElement.style.display = 'block';
+});
+hiddenElement.addEventListener('mouseover', function() {
+    hiddenElement.style.display = 'block';
+  });
+
+targetElement.addEventListener('mouseleave', function() {
+  hiddenElement.style.display = 'none';
+});
+hiddenElement.addEventListener('mouseleave', function() {
+    hiddenElement.style.display = 'none';
+  });
+
+
+     
+</script>
+</body>
+</html>
